@@ -1,0 +1,122 @@
+# 弈境 · 繁體中文圍棋AI對弈台
+
+> AlphaGo 的算力 × 日本棋院的侘寂美學
+
+單檔 HTML 即可運行的現代圍棋平台，木紋棋盤、光澤棋子、段位AI、形勢熱力圖、專業讀秒，一鍵部署到 GitHub Pages。
+
+[Preview](https://img.shields.io/badge/Board-19x19-8B5A2B) [AI](https://img.shields.io/badge/AI-初段%20|%20中段%20|%20高段-black) [License](https://img.shields.io/badge/License-MIT-green)
+
+## 線上試玩
+
+直接打開 `index.html` 或部署後訪問 GitHub Pages。
+
+## 功能總覽
+
+### 棋盤美學
+- 宣紙米白 #f6f1e7 紙紋背景，木紋棋盤 #e8c36a → #d8a95a 多層漸變
+- 棋子 glossy 高光 + 柔和投影，落子有 bounce 彈跳
+- 懸停顯示半透明幽靈子，最後一手白色脈衝環
+- 落子清脆木石撞擊音（Web Audio 合成）
+
+### 完整圍棋規則
+- 19路，提子、氣計算、自殺禁手、劫爭同型禁止
+- 虛著、認輸、悔棋、新對局
+- 星位、座標 1-19
+
+### 三檔段位AI
+- **初段 1-3段**：偏隨機，會走緩手，適合入門
+- **中段 4-6段**：懂吃子、自救、佔角拆邊，1步評估
+- **高段 7-9段**：Top12候選 + 2層淺搜尋，評估=領地+影響力+氣+中央控制
+- AI思考動畫：環繞棋子 spinner + 「弈士思索中…」
+- 每手附繁體意圖解說：佔角、拆邊、破空、打入、攻擊弱子、補強孤子、鞏固實地
+
+### 專業計時讀秒
+- 三種棋份：快棋 5分+3x30秒 / 中速 15分+5x40秒 / 長考 30分+5x60秒
+- 支援自訂基本時限、讀秒次數、每手讀秒
+- 雙鐘顯示：黑方/白方，基本時限 MM:SS，讀秒顯示「讀秒 2/5 · 28秒」紅色閃爍
+- <30秒橙色，<10秒紅色脈動，超時判負
+- 暫停功能，覆盤時自動暫停
+
+### 悔棋不扣時
+- 每步儲存完整時鐘快照（剩餘時間、讀秒次數、當次讀秒剩餘）
+- 悔棋時棋盤與時間一起回溯，提示「已回溯時間」
+
+### 倒數音效
+- 10→6秒：輕嗒 800Hz
+- 5→1秒：急促雙響 1200Hz，音量漸增
+- 讀秒切換：三聲鼓點
+- 超時：長鳴 400Hz 0.6秒
+- 獨立 🔊 開關
+
+### 每手用時統計
+- 右側「用時」面板：手數、顏色、落點（如 Q16）、本手耗時（0.1秒精度）、剩餘時間
+- 統計：平均用時、最長思考、最快落子、總用時
+- 條形圖視覺化黑白用時分佈，關鍵手高亮
+- 覆盤滑桿聯動：拖到某手自動高亮對應用時
+
+### 形勢與覆盤
+- 形勢熱力圖可開關，fade 平滑過渡，黑勢深藍灰、白勢暖米黃
+- 即時目數估算 + 勝率條 + 提子數
+- 終局自動計目（貼目 6.5），紅三角標註關鍵手
+- 橫向滑桿拖動回放，關鍵手吸附聚焦
+
+## 技術
+
+- 單檔 React，無 npm 依賴，Tailwind class
+- 純前端圍棋引擎：flood fill 氣計算、領地判斷
+- Web Audio API 音效
+- 100ms 精度倒數計時
+- 響應式，支援手機
+
+## 本地運行
+
+```bash
+# 直接打開
+open index.html
+
+# 或用簡易伺服器
+python3 -m http.server 8000
+# 訪問 http://localhost:8000
+```
+
+## 部署到 GitHub Pages
+
+### 方法一：網頁上傳
+1. 在 GitHub 新建 repo，例如 `yijing-go`
+2. 上傳 `index.html` 到 main 分支
+3. Settings → Pages → Source 選 Deploy from a branch, Branch: main / root
+4. 儲存，1分鐘後訪問 https://你的帳號.github.io/yijing-go/
+
+### 方法二：指令
+```bash
+git init
+git add index.html README.md
+git commit -m "feat: 弈境繁體版上線"
+git branch -M main
+git remote add origin https://github.com/你的帳號/yijing-go.git
+git push -u origin main
+```
+然後同樣去 Settings → Pages 開啟。
+
+## 檔案結構
+
+```
+yijing-go/
+├── index.html  # 主程式，單檔即玩
+└── README.md   # 本文件
+```
+
+## 自訂
+
+打開 `index.html` 搜尋：
+- `PRESETS`：修改快棋/中速/長考時間
+- `AI_LEVELS`：調整AI評分權重
+- `SOUND`：關閉預設音效
+
+## 授權
+
+MIT License，可商用、修改，需保留原作者資訊。
+
+## 作者
+
+弈境 - 為熱愛圍棋的人做的對弈台
