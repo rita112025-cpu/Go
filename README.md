@@ -2,7 +2,7 @@
 
 > AlphaGo 的算力 × 日本棋院的侘寂美學
 
-單檔 HTML 即可運行的現代圍棋平台，木紋棋盤、光澤棋子、段位AI、形勢熱力圖、專業讀秒，一鍵部署到 GitHub Pages。
+純靜態、免建置即可運行的現代圍棋平台，木紋棋盤、光澤棋子、段位AI、形勢熱力圖、專業讀秒，一鍵部署到 GitHub Pages。
 
 [Preview](https://img.shields.io/badge/Board-19x19-8B5A2B) [AI](https://img.shields.io/badge/AI-初段%20|%20中段%20|%20高段-black) [License](https://img.shields.io/badge/License-MIT-green)
 
@@ -70,8 +70,9 @@
 
 ## 技術
 
-- 單檔 React，無 npm 依賴，Tailwind class
-- 純前端圍棋引擎：flood fill 氣計算、領地判斷
+- 原生 JavaScript 與 CSS，無框架、無 npm、免建置；直接雙擊 html 也能執行
+- 主頁與教學區共用同一份圍棋規則引擎（`js/engine.js`）
+- 純前端圍棋引擎：flood fill 氣計算、領地判斷；征子／枷／倒撲讀棋器
 - Web Audio API 音效
 - 100ms 精度倒數計時
 - 響應式，支援手機
@@ -91,14 +92,14 @@ python3 -m http.server 8000
 
 ### 方法一：網頁上傳
 1. 在 GitHub 新建 repo，例如 `yijing-go`
-2. 上傳 `index.html` 到 main 分支
+2. 上傳 `index.html`、`learn.html` 以及 `css/`、`js/` 資料夾到 main 分支
 3. Settings → Pages → Source 選 Deploy from a branch, Branch: main / root
 4. 儲存，1分鐘後訪問 https://你的帳號.github.io/yijing-go/
 
 ### 方法二：指令
 ```bash
 git init
-git add index.html README.md
+git add index.html learn.html css js README.md
 git commit -m "feat: 弈境繁體版上線"
 git branch -M main
 git remote add origin https://github.com/你的帳號/yijing-go.git
@@ -110,17 +111,28 @@ git push -u origin main
 
 ```
 yijing-go/
-├── index.html  # 主程式，單檔即玩
-├── learn.html  # 教學區：課程題目、9 路提示對局、棋理
-└── README.md   # 本文件
+├── index.html     # 主頁：19 路 AI 對弈（版面）
+├── learn.html     # 教學區（版面）
+├── css/
+│   ├── main.css   # 主頁樣式
+│   └── learn.css  # 教學區樣式
+├── js/
+│   ├── engine.js  # 共用：棋盤、提子、劫、禁著點、計地、征子讀棋
+│   ├── ai.js      # 主頁：三檔段位 AI 與每手意圖解說
+│   ├── clock.js   # 主頁：讀秒計時（主時限 + 讀秒期）
+│   ├── sound.js   # 主頁：Web Audio 音效
+│   ├── app.js     # 主頁：遊戲狀態、悔棋、覆盤、用時統計、畫面更新
+│   ├── coach.js   # 教學區：著手分析（提示與講評）
+│   └── learn.js   # 教學區：課程題目、9 路實戰、棋理
+└── README.md
 ```
 
 ## 自訂
 
-打開 `index.html` 搜尋：
-- `PRESETS`：修改快棋/中速/長考時間
-- `AI_LEVELS`：調整AI評分權重
-- `SOUND`：關閉預設音效
+- `js/clock.js` 的 `PRESETS`：修改快棋／中速／長考時間
+- `js/ai.js` 的 `evaluate`、`rankCandidates`：調整 AI 評分權重
+- `js/app.js` 的 `state.sound`：預設是否開啟音效
+- `js/learn.js` 的 `LESSONS`：新增或修改教學題目（棋形用 `X`／`O`／`.` 字串描述）
 
 ## 授權
 
